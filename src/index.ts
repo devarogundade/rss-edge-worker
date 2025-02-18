@@ -1,5 +1,22 @@
+/**
+ * Welcome to Cloudflare Workers! This is your first worker.
+ *
+ * - Run `npm run dev` in your terminal to start a development server
+ * - Open a browser tab at http://localhost:8787/ to see your worker in action
+ * - Run `npm run deploy` to publish your worker
+ *
+ * Bind resources to your worker in `wrangler.jsonc`. After adding bindings, a type definition for the
+ * `Env` object can be regenerated with `npm run cf-typegen`.
+ *
+ * Learn more at https://developers.cloudflare.com/workers/
+ */
+
 export default {
 	async fetch(request, env) {
+		if (!env.RSS_FEED_CACHE) {
+			return new Response('KV Namespace not found', { status: 500 });
+		}
+
 		const url = new URL(request.url);
 		const category = url.searchParams.get('category') || 'general';
 		const country = url.searchParams.get('country') || 'global';
@@ -31,12 +48,12 @@ export default {
 
 	async scheduled(event, env) {
 		const feeds = [
-			{ category: 'tech', country: 'us', url: 'https://rss.app/feeds/YOUR_TECH_US_FEED.xml' },
-			{ category: 'tech', country: 'in', url: 'https://rss.app/feeds/YOUR_TECH_IN_FEED.xml' },
-			{ category: 'tech', country: 'global', url: 'https://rss.app/feeds/YOUR_TECH_GLOBAL_FEED.xml' },
-			{ category: 'sports', country: 'us', url: 'https://rss.app/feeds/YOUR_SPORTS_US_FEED.xml' },
-			{ category: 'sports', country: 'global', url: 'https://rss.app/feeds/YOUR_SPORTS_GLOBAL_FEED.xml' },
-			{ category: 'crypto', country: 'global', url: 'https://rss.app/feeds/YOUR_CRYPTO_FEED.xml' },
+			{ category: 'tech', country: 'us', url: 'https://rss.app/feeds/tzCUQZ9WynNvVWwk.xml' },
+			{ category: 'tech', country: 'in', url: 'https://rss.app/feeds/thfLJNJu5h8jxOSy.xml' },
+			{ category: 'tech', country: 'global', url: 'https://rss.app/feeds/tbIDeyra4ZnaA36V.xml' },
+			{ category: 'sports', country: 'us', url: 'https://rss.app/feeds/twElsFlCKj2veocC.xml' },
+			{ category: 'sports', country: 'global', url: 'https://rss.app/feeds/tcxlazmrJnWn8KLb.xml' },
+			{ category: 'crypto', country: 'global', url: 'https://rss.app/feeds/tdj9XXOgnIXNxXXX.xml' },
 		];
 
 		for (const feed of feeds) {
@@ -48,4 +65,4 @@ export default {
 			}
 		}
 	},
-};
+} satisfies ExportedHandler<Env>;
